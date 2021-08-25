@@ -1,7 +1,5 @@
 import { defineComponent, reactive } from 'vue'
 import { RouterView } from 'vue-router'
-import '@/assets/less/common.less'
-
 import {
   ElContainer,
   ElHeader,
@@ -16,32 +14,35 @@ import {
   ElDropdownItem
 } from 'element-plus'
 
+import Logo from '@/assets/images/dzsl.png'
+import '@/assets/less/common.less'
+
 export default defineComponent({
   props: {},
   emits: [],
   components: {},
   setup(props, ctx) {
-    const data = reactive({
-      title: 'title'
-      
-    })
     return () => (
       <ElContainer style="height: 100vh; border: 1px solid #eee">
-        <ElHeader style="text-align: right; background-color: #fff;">
-          <ElDropdown
-            v-slots={{
-              dropdown: () => (
-                <ElDropdownMenu>
-                  <ElDropdownItem>查看</ElDropdownItem>
-                  <ElDropdownItem>新增</ElDropdownItem>
-                  <ElDropdownItem>删除</ElDropdownItem>
-                </ElDropdownMenu>
-              )
-            }}
-          >
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-          </ElDropdown>
-          <span>王小虎</span>
+        <ElHeader class="bg-white flex items-center justify-between">
+          <div class="h-full flex items-center text-gray-400">
+            <img class="h-full mr-5" src={Logo} alt="" /> 美好的季节到来，稻子熟了~ Oh, yeah !
+          </div>
+          <div>
+            <ElDropdown
+              v-slots={{
+                dropdown: () => (
+                  <ElDropdownMenu>
+                    <ElDropdownItem>前往</ElDropdownItem>
+                    <ElDropdownItem>退出</ElDropdownItem>
+                  </ElDropdownMenu>
+                )
+              }}
+            >
+              <span>王小虎</span>
+              <i class="el-icon-setting ml-2"></i>
+            </ElDropdown>
+          </div>
         </ElHeader>
 
         <ElContainer>
