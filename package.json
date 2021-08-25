@@ -1,0 +1,36 @@
+{
+  "name": "daozishule-backend",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@kangc/v-md-editor": "^1.7.7",
+    "axios": "^0.21.1",
+    "vue": "^3.0.5",
+    "vue-router": "4.0.11"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.7",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "@vitejs/plugin-vue": "^1.3.0",
+    "@vitejs/plugin-vue-jsx": "^1.1.7",
+    "@vue/compiler-sfc": "^3.0.5",
+    "autoprefixer": "^9",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "eslint-plugin-vue": "^7.16.0",
+    "postcss": "^7",
+    "prettier": "^2.3.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "typescript": "^4.3.2",
+    "vite": "^2.4.4",
+    "vue-tsc": "^0.2.2"
+  }
+}
