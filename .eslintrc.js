@@ -1,17 +1,17 @@
 module.exports = {
-  parser: "vue-eslint-parser",
+  parser: 'vue-eslint-parser',
   parserOptions: {
-    parser: "@typescript-eslint/parser", // Specifies the ESLint parser
+    parser: '@typescript-eslint/parser', // Specifies the ESLint parser
     ecmaVersion: 2020, // Allows for the parsing of modern ECMAScript features
-    sourceType: "module", // Allows for the use of imports
+    sourceType: 'module', // Allows for the use of imports
     ecmaFeatures: {
-      jsx: true, // Allows for the parsing of JSX
-    },
+      jsx: true // Allows for the parsing of JSX
+    }
   },
   extends: [
-    "plugin:vue/vue3-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
+    'plugin:vue/vue3-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended'
   ],
-  rules: {},
-};
+  rules: {}
+}

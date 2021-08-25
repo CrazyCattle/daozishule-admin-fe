@@ -1,12 +1,12 @@
 import { defineComponent, reactive } from 'vue'
+import { RouterView } from 'vue-router'
 import '@/assets/less/common.less'
+
 import {
   ElContainer,
   ElHeader,
   ElAside,
   ElMain,
-  ElTable,
-  ElTableColumn,
   ElMenu,
   ElSubMenu,
   ElMenuItem,
@@ -22,13 +22,8 @@ export default defineComponent({
   components: {},
   setup(props, ctx) {
     const data = reactive({
-      title: 'title',
-      dropdown: false,
-      tableData: new Array(30).fill({
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      })
+      title: 'title'
+      
     })
     return () => (
       <ElContainer style="height: 100vh; border: 1px solid #eee">
@@ -141,11 +136,7 @@ export default defineComponent({
             </ElMenu>
           </ElAside>
           <ElMain style="padding: 10px;">
-            <ElTable data={data.tableData} height="300">
-              <ElTableColumn prop="date" label="日期" width="140"></ElTableColumn>
-              <ElTableColumn prop="name" label="姓名" width="120"></ElTableColumn>
-              <ElTableColumn prop="address" label="地址"></ElTableColumn>
-            </ElTable>
+            <RouterView/>
           </ElMain>
         </ElContainer>
       </ElContainer>

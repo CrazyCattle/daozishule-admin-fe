@@ -1,5 +1,5 @@
 {
-  "name": "daozishule-backend",
+  "name": "daozishule-admin",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
