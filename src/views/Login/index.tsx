@@ -1,5 +1,6 @@
 import { defineComponent, reactive, ref } from 'vue'
-import { ElForm, ElFormItem, ElInput, ElButton } from 'element-plus'
+import { ElForm, ElFormItem, ElInput, ElButton, ElMessage } from 'element-plus'
+import { login } from '@/apis/index'
 import LOGIN_BG from '@/assets/images/login-bg.png'
 export default defineComponent({
   components: {},
@@ -10,13 +11,28 @@ export default defineComponent({
         password: ''
       }
     })
-
+    const Login = async () => {
+      const respon = await login({
+        name: data.formData.username,
+        password: data.formData.password
+      })
+      console.log(respon, 'respon');
+      const { status, message, statusTip } = respon.data
+      if (status && status == 1) {
+        ElMessage.success(statusTip);
+        window.sessionStorage.setItem('TOKEN', respon.data.token)
+        window.sessionStorage.setItem('_id', respon.data._id)
+        window.location.href = '/'
+      } else {
+        ElMessage.error(message);
+      }
+    }
     const loginFormRef = ref<typeof ElForm | null>(null)
     const handleSubmit = () => {
       if (!loginFormRef.value) return
       loginFormRef.value.validate((v: boolean) => {
         if (v) {
-          console.log(v, 'submit ok')
+          Login()
         } else {
           return
         }

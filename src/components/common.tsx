@@ -49,7 +49,7 @@ export default defineComponent({
 
           <ElContainer>
             <ElAside width="200px" style="background-color: #fff">
-              <ElMenu style="border: none;">
+              <ElMenu defaultOpeneds={['1', '2']} style="border: none;">
                 <ElSubMenu
                   index="1"
                   v-slots={{
