@@ -25,8 +25,8 @@ export default defineComponent({
     })
     return () => {
       return (
-        <ElContainer style="height: 100vh; border: 1px solid #eee">
-          <ElHeader class="bg-white flex items-center justify-between">
+        <ElContainer style="height: 100vh;">
+          <ElHeader class="bg-white flex items-center justify-between border-b-2">
             <div class="h-full flex items-center text-gray-400">
               <img class="h-full mr-5" src={Logo} alt="" /> 美好的季节到来，稻子熟了~ Oh, yeah !
             </div>
