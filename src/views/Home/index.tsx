@@ -1,57 +1,52 @@
 import { defineComponent, reactive } from 'vue'
 import { ElTableColumn, ElButton } from 'element-plus'
 import Table from '@/components/table'
+import { getArticles } from '@/apis/index'
+import { tableDataType } from '@/interfaces/table'
+
+interface ReaciveProps {
+  tableData: tableDataType;
+}
 
 export default defineComponent({
   props: {},
   emits: [],
   components: {},
   setup(props, ctx) {
-    const data = reactive({
+    const data = reactive<ReaciveProps>({
       tableData: {
-        list: [
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }
-        ],
-        columns: [
-          {
-            prop: 'date',
-            label: '事件',
-            type: ''
-          },
-          {
-            prop: 'name',
-            label: '姓名',
-            type: ''
-          },
-          {
-            prop: 'address',
-            label: '地址',
-            type: ''
-          },
-          {
-            prop: 'opera',
-            label: '操作',
-            type: 'slot',
-            slot: 'test'
-          }
-        ],
+        list: [],
+        columns: [],
         options: {
           tableHeight: 500
         }
       }
     })
-    function handleDel(v: any) {
-      console.log(v)
+    function handleDel(v: any, type: string) {
+      console.log(v, type)
     }
+
+    const getArticlesList = () => {
+      getArticles({
+        type: 'all'
+      }).then((res) => {
+        let columns = []
+        columns.push(
+          {
+            prop: 'title',
+            label: '标题'
+          },
+          {
+            prop: 'createAt',
+            label: '创建时间'
+          }
+        )
+        data.tableData.list = [...res.data]
+        data.tableData.columns = [...columns]
+      })
+    }
+    getArticlesList()
+    
     return () => {
       return (
         <div>
@@ -62,14 +57,34 @@ export default defineComponent({
                 return (
                   <ElTableColumn
                     fixed="right"
-                    align="left"
+                    align="center"
                     label="操作"
                     v-slots={{
                       default: (scope: any) => {
                         return (
-                          <ElButton type="primary" size="small" onClick={() => handleDel(scope)}>
-                            删除
-                          </ElButton>
+                          <div>
+                            <ElButton
+                              type="primary"
+                              size="small"
+                              onClick={() => handleDel(scope.row, 'edit')}
+                            >
+                              编辑
+                            </ElButton>
+                            <ElButton
+                              type="success"
+                              size="small"
+                              onClick={() => handleDel(scope.row, 'view')}
+                            >
+                              查看
+                            </ElButton>
+                            <ElButton
+                              type="danger"
+                              size="small"
+                              onClick={() => handleDel(scope.row, 'del')}
+                            >
+                              删除
+                            </ElButton>
+                          </div>
                         )
                       }
                     }}
@@ -82,23 +97,4 @@ export default defineComponent({
       )
     }
   }
-
-  // render() {
-  //   return (
-  //     <Table
-  //       tableData={this.data.tableData}
-  //       v-slots={{
-  //         default: (props: any) => {
-  //           return (
-  //             <ElTableColumn fixed="right" align="left" label="操作">
-  //               <ElButton type="primary" size="small" onClick={() => this.handleDel()}>
-  //                 删除 {props}
-  //               </ElButton>
-  //             </ElTableColumn>
-  //           )
-  //         }
-  //       }}
-  //     ></Table>
-  //   )
-  // }
 })
