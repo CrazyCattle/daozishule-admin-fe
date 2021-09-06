@@ -1,5 +1,6 @@
 import { defineComponent, reactive } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
+import { ElLoading } from 'element-plus'
 import CommonPage from '@/components/common'
 import '@/assets/less/common.less'
 
@@ -7,9 +8,9 @@ export default defineComponent({
   props: {},
   emits: [],
   components: { CommonPage },
-  setup(props, ctx) {
+  setup() {
     const data = reactive({
-      isLogin: true
+      isLogin: true,
     })
     
     const router = useRouter()
@@ -19,6 +20,6 @@ export default defineComponent({
       router.replace('/Login')
     }
     
-    return () => <RouterView/>
+    return () => <RouterView  />
   }
 })

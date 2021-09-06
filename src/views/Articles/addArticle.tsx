@@ -1,5 +1,14 @@
 import { defineComponent, reactive, ref } from 'vue'
-import { ElButton, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElMessage } from 'element-plus'
+import {
+  ElButton,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElMessage,
+  ElLoading
+} from 'element-plus'
 import { useRouter } from 'vue-router'
 import { createArticle, getCategories } from '@/apis/index'
 interface categoriesType {
@@ -22,7 +31,8 @@ export default defineComponent({
         typeList: [],
         content: ''
       },
-      categroies: []
+      categroies: [],
+      fullscreenLoading: false
     })
 
     const formRef = ref<typeof ElForm | null>(null)
@@ -53,7 +63,7 @@ export default defineComponent({
       })
     }
 
-    function handleSubmit(): void {
+    const handleSubmit = (): void => {
       if (!formRef.value) return
       formRef.value.validate((v: boolean) => {
         if (v) {
