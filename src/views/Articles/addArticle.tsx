@@ -1,6 +1,14 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { ElButton, ElForm, ElFormItem, ElInput, ElSelect, ElOption, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { createArticle, getCategories } from '@/apis/index'
+interface categoriesType {
+  _id: string
+  __v: number
+  name: string
+  url: string
+  createAt: string
+}
 
 export default defineComponent({
   props: {},
@@ -11,20 +19,45 @@ export default defineComponent({
       formData: {
         title: '',
         desc: '',
-        type: '',
+        typeList: [],
         content: ''
-      }
+      },
+      categroies: []
     })
 
     const formRef = ref<typeof ElForm | null>(null)
     const router = useRouter()
 
+    function getCategoriesFun(): void {
+      getCategories({}).then((res) => {
+        data.categroies = res.data
+      })
+    }
+    getCategoriesFun()
+
+    function createArticleFun() {
+      createArticle({
+        title: data.formData.title,
+        describe: data.formData.desc,
+        content: data.formData.content,
+        categoray: JSON.stringify(data.formData.typeList)
+      }).then((res) => {
+        if (res.status == 200 && res.statusText == 'OK') {
+          ElMessage.success('提交通过！')
+          router.replace({
+            path: '/Articles'
+          })
+        } else {
+          ElMessage.success(res.statusText)
+        }
+      })
+    }
+
     function handleSubmit(): void {
       if (!formRef.value) return
       formRef.value.validate((v: boolean) => {
         if (v) {
-          console.log(data.formData)
-          ElMessage.success('验证通过！')
+          createArticleFun()
         } else {
           return
         }
@@ -73,7 +106,7 @@ export default defineComponent({
                 <ElFormItem
                   label="文章所属类别:"
                   class=" w-auto mr-5"
-                  prop="type"
+                  prop="typeList"
                   rules={[
                     {
                       required: true,
@@ -83,12 +116,15 @@ export default defineComponent({
                 >
                   <ElSelect
                     class=" w-full"
-                    v-model={data.formData.type}
+                    v-model={data.formData.typeList}
                     placeholder="请选择文章所属类别"
                     clearable
+                    multiple
+                    collapseTags
                   >
-                    <ElOption label="Vue" value="60b5af3a6a4b1eccb19183cd"></ElOption>
-                    <ElOption label="React" value="60b5af426a4b1eccb19183ce"></ElOption>
+                    {data.categroies.map((v: categoriesType) => {
+                      return <ElOption label={v.name} value={v._id}></ElOption>
+                    })}
                   </ElSelect>
                 </ElFormItem>
                 <ElFormItem

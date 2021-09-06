@@ -1,13 +1,21 @@
 import { defineComponent, reactive } from 'vue'
 import { ElTableColumn, ElButton, ElSelect, ElOption } from 'element-plus'
 import Table from '@/components/table'
-import { getArticles } from '@/apis/index'
+import { getArticles, getCategories } from '@/apis/index'
 import { tableDataType } from '@/interfaces/table'
 import { useRouter } from 'vue-router'
 
+interface categoriesType {
+  _id: string
+  __v: number
+  name: string
+  url: string
+  createAt: string
+}
 interface ReaciveProps {
   tableData: tableDataType
   type: string
+  typeList: []
 }
 
 export default defineComponent({
@@ -24,7 +32,8 @@ export default defineComponent({
           tableHeight: 500
         }
       },
-      type: ''
+      type: '',
+      typeList: []
     })
 
     function handleDel(v: any, type: string): void {
@@ -37,6 +46,13 @@ export default defineComponent({
         path: '/AddArticle'
       })
     }
+
+    function getCategoriesFun(): void {
+      getCategories({}).then((res) => {
+        data.typeList = res.data
+      })
+    }
+    getCategoriesFun()
 
     function getArticlesList(type: string): void {
       getArticles({
@@ -73,8 +89,9 @@ export default defineComponent({
                   getArticlesList(v || 'all')
                 }}
               >
-                <ElOption label="Vue" value="60b5af3a6a4b1eccb19183cd"></ElOption>
-                <ElOption label="React" value="60b5af426a4b1eccb19183ce"></ElOption>
+                {data.typeList.map((v: categoriesType) => {
+                  return <ElOption label={v.name} value={v._id}></ElOption>
+                })}
               </ElSelect>
             </div>
             <ElButton
