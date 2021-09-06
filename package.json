@@ -9,7 +9,7 @@
     "lint:fix": "eslint src --fix --ext .ts,.tsx"
   },
   "dependencies": {
-    "@kangc/v-md-editor": "^1.7.7",
+    "@kangc/v-md-editor": "^2.3.8",
     "axios": "^0.21.1",
     "element-plus": "^1.1.0-beta.3",
     "vue": "^3.0.5",
