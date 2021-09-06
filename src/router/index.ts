@@ -15,6 +15,11 @@ const routes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/AddArticle',
+    name: 'AddArticle',
+    component: () => import('@/views/Articles/addArticle')
+  },
+  {
     path: '/Login',
     name: 'login',
     component: () => import('@/views/Login/index')

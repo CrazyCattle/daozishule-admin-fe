@@ -1,11 +1,13 @@
 import { defineComponent, reactive } from 'vue'
-import { ElTableColumn, ElButton } from 'element-plus'
+import { ElTableColumn, ElButton, ElSelect, ElOption } from 'element-plus'
 import Table from '@/components/table'
 import { getArticles } from '@/apis/index'
 import { tableDataType } from '@/interfaces/table'
+import { useRouter } from 'vue-router'
 
 interface ReaciveProps {
-  tableData: tableDataType;
+  tableData: tableDataType
+  type: string
 }
 
 export default defineComponent({
@@ -13,6 +15,7 @@ export default defineComponent({
   emits: [],
   components: {},
   setup(props, ctx) {
+    const router = useRouter()
     const data = reactive<ReaciveProps>({
       tableData: {
         list: [],
@@ -20,15 +23,24 @@ export default defineComponent({
         options: {
           tableHeight: 500
         }
-      }
+      },
+      type: ''
     })
-    function handleDel(v: any, type: string) {
+
+    function handleDel(v: any, type: string): void {
       console.log(v, type)
     }
 
-    const getArticlesList = () => {
+    function handleAdd(): void {
+      console.log(router)
+      router.push({
+        path: '/AddArticle'
+      })
+    }
+
+    function getArticlesList(type: string): void {
       getArticles({
-        type: 'all'
+        type
       }).then((res) => {
         let columns = []
         columns.push(
@@ -45,11 +57,36 @@ export default defineComponent({
         data.tableData.columns = [...columns]
       })
     }
-    getArticlesList()
-    
+    getArticlesList('all')
+
     return () => {
       return (
         <div>
+          <div class="flex justify-between p-2 bg-white border-b-2">
+            <div class="flex">
+              <ElSelect
+                size="small"
+                clearable
+                placeholder="请选择文章所属类别"
+                v-model={data.type}
+                onChange={(v) => {
+                  getArticlesList(v || 'all')
+                }}
+              >
+                <ElOption label="Vue" value="60b5af3a6a4b1eccb19183cd"></ElOption>
+                <ElOption label="React" value="60b5af426a4b1eccb19183ce"></ElOption>
+              </ElSelect>
+            </div>
+            <ElButton
+              onClick={() => {
+                handleAdd()
+              }}
+              type="primary"
+              size="small"
+            >
+              新增文章
+            </ElButton>
+          </div>
           <Table
             tableData={data.tableData}
             v-slots={{
