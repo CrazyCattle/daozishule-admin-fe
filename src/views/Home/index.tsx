@@ -1,11 +1,11 @@
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElTableColumn, ElButton, ElSelect, ElOption } from 'element-plus'
-import Table from '@/components/table'
-import { getArticles, getCategories } from '@/apis/index'
 import { tableDataType } from '@/interfaces/table'
+import { getArticles, getCategories, delArticle } from '@/apis/index'
+import Table from '@/components/table'
 import Dialog from '@/components/dialog'
-
+import { ArticleType } from '@/interfaces/interface-tags'
 interface categoriesType {
   _id: string
   __v: number
@@ -15,10 +15,11 @@ interface categoriesType {
 }
 interface ReaciveProps {
   tableData: tableDataType
+  currentType: string
   type: string
   typeList: []
   visible: boolean
-  rowData: object
+  rowData: ArticleType
 }
 
 export default defineComponent({
@@ -35,13 +36,21 @@ export default defineComponent({
           tableHeight: 500
         }
       },
+      currentType: '',
       type: '',
       typeList: [],
       visible: false,
-      rowData: {}
+      rowData: {
+        title: '',
+        author: '',
+        describe: '',
+        content: '',
+        views: 0,
+        thumbsUp: 0,
+        categoray: [],
+        createAt: ''
+      }
     })
-
-    let width = ref('500px')
 
     function handleDel(v: any, type: string): void {
       console.log(v, type)
@@ -58,6 +67,17 @@ export default defineComponent({
       })
     }
 
+    function handleDelArticle() {
+      delArticle({
+        id: data.rowData._id
+      }).then(res => {
+        if (res.status == 204) {
+          data.visible = false
+          getArticlesList()
+        }
+      })
+    }
+
     function getCategoriesFun(): void {
       getCategories({}).then((res) => {
         data.typeList = res.data
@@ -65,9 +85,9 @@ export default defineComponent({
     }
     getCategoriesFun()
 
-    function getArticlesList(type: string): void {
+    function getArticlesList(): void {
       getArticles({
-        type
+        type: data.currentType || 'all'
       }).then((res) => {
         let columns = []
         columns.push(
@@ -84,16 +104,16 @@ export default defineComponent({
         data.tableData.columns = [...columns]
       })
     }
-    getArticlesList('all')
+    getArticlesList()
 
     const dialog = (): JSX.Element => (
       <Dialog
         visible={data.visible}
-        width={width.value}
-        onCloseDialog={(v) => {
-          width.value = '600px'
-          console.log(data)
+        onCloseDialog={() => {
           data.visible = !data.visible
+        }}
+        onHandleSumbit={() => {
+          handleDelArticle()
         }}
         v-slots={{
           content: () => {
@@ -128,7 +148,8 @@ export default defineComponent({
                 placeholder="请选择文章所属类别"
                 v-model={data.type}
                 onChange={(v) => {
-                  getArticlesList(v || 'all')
+                  data.currentType = v
+                  getArticlesList()
                 }}
               >
                 {data.typeList.map((v: categoriesType) => {

@@ -12,18 +12,16 @@ export default defineComponent({
       type: String
     }
   },
-  emits: ['closeDialog'],
+  emits: ['closeDialog', 'handleSumbit'],
   components: {},
   setup(props, ctx) {
-    console.log(ctx, 'ctx');
     const { slots, emit } = ctx
-
     return () => {
       return (
         <ElDialog
           title="这是标题"
           model-value={props.visible}
-          width={props.width}
+          width={props.width || '500px'}
           v-slots={{
             footer: () => {
               return (
@@ -31,13 +29,19 @@ export default defineComponent({
                   <ElButton
                     type="default"
                     onClick={() => {
-                      emit('closeDialog', false)
-                      // emit('update:visible', false)
+                      emit('closeDialog')
                     }}
                   >
                     取消
                   </ElButton>
-                  <ElButton type="primary">确 定</ElButton>
+                  <ElButton
+                    type="primary"
+                    onClick={() => {
+                      emit('handleSumbit')
+                    }}
+                  >
+                    确 定
+                  </ElButton>
                 </span>
               )
             }

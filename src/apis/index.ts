@@ -13,6 +13,7 @@ const ApiUrls = {
   getCategories: `${BASE_URL}/getCategories`,
   login: `${BASE_URL}/users/login`,
   createArticle: `${BASE_URL}/createArticle`,
+  delArticle: `${BASE_URL}/delArticle`,
   getArticleDetail: `${BASE_URL}/getArticleDetail`
 }
 
@@ -30,4 +31,7 @@ export const login = (params: any): Promise<AxiosResponse> => {
 }
 export const createArticle = (params: any): Promise<AxiosResponse> => {
   return post(ApiUrls.createArticle, params)
+}
+export const delArticle = (params: any): Promise<AxiosResponse> => {
+  return post(ApiUrls.delArticle, params)
 }
