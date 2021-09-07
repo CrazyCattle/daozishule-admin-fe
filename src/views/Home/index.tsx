@@ -1,9 +1,10 @@
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElTableColumn, ElButton, ElSelect, ElOption } from 'element-plus'
 import Table from '@/components/table'
 import { getArticles, getCategories } from '@/apis/index'
 import { tableDataType } from '@/interfaces/table'
-import { useRouter } from 'vue-router'
+import Dialog from '@/components/dialog'
 
 interface categoriesType {
   _id: string
@@ -16,6 +17,8 @@ interface ReaciveProps {
   tableData: tableDataType
   type: string
   typeList: []
+  visible: boolean
+  rowData: object
 }
 
 export default defineComponent({
@@ -33,11 +36,19 @@ export default defineComponent({
         }
       },
       type: '',
-      typeList: []
+      typeList: [],
+      visible: false,
+      rowData: {}
     })
+
+    let width = ref('500px')
 
     function handleDel(v: any, type: string): void {
       console.log(v, type)
+      data.rowData = { ...v }
+      if (type == 'del') {
+        data.visible = true
+      }
     }
 
     function handleAdd(): void {
@@ -74,6 +85,37 @@ export default defineComponent({
       })
     }
     getArticlesList('all')
+
+    const dialog = (): JSX.Element => (
+      <Dialog
+        visible={data.visible}
+        width={width.value}
+        onCloseDialog={(v) => {
+          width.value = '600px'
+          console.log(data)
+          data.visible = !data.visible
+        }}
+        v-slots={{
+          content: () => {
+            return <div>这里是默认内容</div>
+          }
+        }}
+      ></Dialog>
+    )
+
+    const btnGroup = (v: any): JSX.Element => (
+      <>
+        <ElButton type="primary" size="small" onClick={() => handleDel(v, 'edit')}>
+          编辑
+        </ElButton>
+        <ElButton type="success" size="small" onClick={() => handleDel(v, 'view')}>
+          查看
+        </ElButton>
+        <ElButton type="danger" size="small" onClick={() => handleDel(v, 'del')}>
+          删除
+        </ElButton>
+      </>
+    )
 
     return () => {
       return (
@@ -115,31 +157,7 @@ export default defineComponent({
                     label="操作"
                     v-slots={{
                       default: (scope: any) => {
-                        return (
-                          <div>
-                            <ElButton
-                              type="primary"
-                              size="small"
-                              onClick={() => handleDel(scope.row, 'edit')}
-                            >
-                              编辑
-                            </ElButton>
-                            <ElButton
-                              type="success"
-                              size="small"
-                              onClick={() => handleDel(scope.row, 'view')}
-                            >
-                              查看
-                            </ElButton>
-                            <ElButton
-                              type="danger"
-                              size="small"
-                              onClick={() => handleDel(scope.row, 'del')}
-                            >
-                              删除
-                            </ElButton>
-                          </div>
-                        )
+                        return btnGroup(scope.row)
                       }
                     }}
                   ></ElTableColumn>
@@ -147,6 +165,8 @@ export default defineComponent({
               }
             }}
           ></Table>
+
+          {dialog()}
         </div>
       )
     }
