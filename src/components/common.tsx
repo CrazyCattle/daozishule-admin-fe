@@ -49,7 +49,7 @@ export default defineComponent({
 
           <ElContainer>
             <ElAside width="200px" style="background-color: #fff">
-              <ElMenu defaultOpeneds={['1', '2']} style="border: none;">
+              <ElMenu router={true} defaultOpeneds={['1', '2']} style="border: none;">
                 <ElSubMenu
                   index="1"
                   v-slots={{
@@ -60,7 +60,7 @@ export default defineComponent({
                     )
                   }}
                 >
-                  <ElMenuItem index="1-1">文章管理</ElMenuItem>
+                  <ElMenuItem index="/Articles">文章管理</ElMenuItem>
                 </ElSubMenu>
                 <ElSubMenu
                   index="2"
@@ -72,7 +72,7 @@ export default defineComponent({
                     )
                   }}
                 >
-                  <ElMenuItem index="2-1">标签管理</ElMenuItem>
+                  <ElMenuItem index="/Categories">标签管理</ElMenuItem>
                 </ElSubMenu>
               </ElMenu>
             </ElAside>

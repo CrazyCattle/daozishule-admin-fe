@@ -10,6 +10,10 @@ export default defineComponent({
     },
     width: {
       type: String
+    },
+    title: {
+      type: String,
+      default: '这是标题'
     }
   },
   emits: ['closeDialog', 'handleSumbit'],
@@ -19,7 +23,7 @@ export default defineComponent({
     return () => {
       return (
         <ElDialog
-          title="这是标题"
+          title={props.title}
           model-value={props.visible}
           width={props.width || '500px'}
           v-slots={{
